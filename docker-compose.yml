@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: ms-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  orders-service:
+    build: ./orders-service
+    container_name: orders-service
+    environment:
+      - SERVICE_PORT=4001
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+    depends_on:
+      - rabbitmq
+
+  payments-service:
+    build: ./payments-service
+    container_name: payments-service
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+    depends_on:
+      - rabbitmq
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      - GATEWAY_PORT=3000
+      - ORDERS_SERVICE_URL=http://orders-service:4001
+    depends_on:
+      - orders-service

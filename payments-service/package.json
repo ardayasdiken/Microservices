@@ -1,0 +1,17 @@
+{
+  "name": "payments-service",
+  "version": "1.0.0",
+  "description": "Payments microservice for microservices demo",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
